@@ -1,0 +1,25 @@
+.attendance {
+  &__header {
+    text-align: center;
+    color: #fff;
+    height: 64px;
+    padding-inline: 50px;
+    line-height: 64px;
+    background-color: #7dbcea;
+  }
+
+  &__content {
+    text-align: center;
+    min-height: 120;
+    line-height: 120px;
+    color: #fff;
+    background-color: #108ee9;
+  }
+
+  &__sider {
+    text-align: center;
+    line-height: 120px;
+    color: #fff;
+    background-color: #3ba0e9;
+  }
+}
