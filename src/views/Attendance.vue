@@ -1,23 +1,21 @@
-<script lang="ts">
-export default{
-  setup() {
-    return {
-      
-    }
-  },
-}
+<template>
+  <AdminLayout class="attendance">
+    <template #sider>Sider</template>
+    <template #content>
+      <div class="attendance__head">
+        <span>Date Range</span>
+        
+      </div>
+    </template>
+  </AdminLayout>
+</template>
+
+<script setup lang="ts">
+import AdminLayout from "../components/layouts/AdminLayout.vue";
 </script>
 
-<style lang="scss">
-@import url("../styles/attendance.scss");
-</style>
+<style lang="scss" scoped>
+.attendance {
 
-<template>
-  <a-layout class="attendance">
-    <a-layout-header class="attendance__header">Header</a-layout-header>
-    <a-layout>
-      <a-layout-sider class="attendance__sider">Sider</a-layout-sider>
-      <a-layout-content class="attendance__content">Content</a-layout-content>
-    </a-layout>
-  </a-layout>
-</template>
+}
+</style>
