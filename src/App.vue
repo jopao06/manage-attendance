@@ -1,5 +1,14 @@
 <template>
+  <a-config-provider :theme="{
+    token: {
+      colorPrimary: '#17AD49',
+      colorTextBase: '#00291B',
+      fontFamily: 'Rubik, sans-serif',
+      fontSize: 16,
+    }
+  }">
     <RouterView />
+  </a-config-provider>
 </template>
 
 <style>

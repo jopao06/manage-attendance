@@ -1,5 +1,5 @@
 <template>
-  <a-layout-content>
+  <a-layout-content v-bind="$attrs">
     <slot></slot>
   </a-layout-content>
 </template>

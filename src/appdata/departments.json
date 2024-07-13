@@ -1,0 +1,11 @@
+[{"department_id":1,"department_name":"Accounting","company_id":3,"location":"93 Gale Alley"},
+{"department_id":2,"department_name":"Product Management","company_id":2,"location":"802 Prairie Rose Avenue"},
+{"department_id":3,"department_name":"Training","company_id":1,"location":"16 Lakeland Point"},
+{"department_id":4,"department_name":"Marketing","company_id":1,"location":"0122 Rigney Drive"},
+{"department_id":5,"department_name":"Engineering","company_id":1,"location":null},
+{"department_id":6,"department_name":"Business Development","company_id":1,"location":"20 Melby Junction"},
+{"department_id":6,"department_name":"Business Development","company_id":1,"location":"558 Straubel Way"},
+{"department_id":7,"department_name":"Engineering","company_id":1,"location":"558 Straubel Way"},
+{"department_id":8,"department_name":"Services","company_id":1,"location":"69 Crownhardt Way"},
+{"department_id":9,"department_name":"Research and Development","company_id":2,"location":"05 Oak Park"},
+{"department_id":10,"department_name":"Legal","company_id":2,"location":"43481 Manitowish Plaza"}]

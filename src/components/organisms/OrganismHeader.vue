@@ -1,6 +1,6 @@
 <!-- Default header contents-->
 <template>
-  <a-layout-header class="molecule-header">
+  <a-layout-header class="molecule-header" v-bind="$attrs">
     <img class="molecule-header__logo" :src="logoImg">
     <a-menu
       class="molecule-header__nav-menu"
@@ -53,7 +53,6 @@ const navMenuItems = ref<MenuProps['items']>([
 
   &__logo {
     height: 100%;
-    margin-left: 14px;
   }
 
   &__nav-menu {
