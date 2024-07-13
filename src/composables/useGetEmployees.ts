@@ -2,30 +2,30 @@ import { computed } from "vue";
 import attendances from "../appdata/attendances.json";
 import type { SelectProps } from 'ant-design-vue';
 
-export default function getDepartments(company: string) {
-  const departments = computed(
+export default function getEmployees(company: string, department: string) {
+  const employees = computed(
     () => Array.from(
       new Set(
         attendances
-          .filter((attendance) => attendance.company === company)
+          .filter((attendance) => attendance.company === company && attendance.department_name === department)
           .map((attendance) => {
-            return attendance.department_name;
+            return attendance.empoyee_name;
         })
       )
     )
   );
   const options = computed<SelectProps['options']>(() => {
-    return departments.value.map((department) => {
+    return employees.value.map((employee) => {
       return {
-        value: department,
-        label: department
+        value: employee,
+        label: employee
       };
     });
   });
 
 
   return {
-    departments,
+    employees,
     options
   }
 };

@@ -93,6 +93,7 @@ const { generatedAttendance: tableData }= getAttendance();
   &__header {
     width: 100%;
     display: flex;
+    margin-bottom: $default-spacing;
 
     &-icon {
       color: $primary-color;

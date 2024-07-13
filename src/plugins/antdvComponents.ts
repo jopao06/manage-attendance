@@ -6,7 +6,8 @@ import {
   Radio,
   Table,
   Tag,
-  Input,
+  DatePicker,
+  Select,
 } from 'ant-design-vue';
 
 export function useAntdvComponents (app: App<Element>) {
@@ -17,5 +18,6 @@ export function useAntdvComponents (app: App<Element>) {
     .use(Radio)
     .use(Table)
     .use(Tag)
-    .use(Input);
+    .use(DatePicker)
+    .use(Select);
 }
