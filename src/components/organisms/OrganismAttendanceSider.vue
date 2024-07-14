@@ -3,6 +3,8 @@
     <div class="attendance-sider__header">
       <h2>Manage Attendance</h2>
       <p>Attendance management is where you can generate, add, edit, and export the logs of the employees.</p>
+
+      <MoleculeSiderNavList @switchContent="switchContentHandler"></MoleculeSiderNavList>
     </div >
     <div class="attendance-sider__filter">
       <h1>DATE RANGE</h1>
@@ -23,10 +25,8 @@
     </div>
     <div class="attendance-sider__action">
       <AtomButton class="attendance-sider__action-search" type="primary" @click="searchHandler" :disabled="areButtonsDisabled"><font-awesome-icon :icon="['fas', 'search']" />Search</AtomButton>
-      <AtomButton class="attendance-sider__action-export" @click="searchHandler" :disabled="areButtonsDisabled">
-        <download-excel :data="tableData">
-          <font-awesome-icon :icon="['fas', 'download']" />Export
-        </download-excel>
+      <AtomButton class="attendance-sider__action-export" @click="exportHandler" :disabled="areButtonsDisabled">
+        <font-awesome-icon :icon="['fas', 'download']" />Export
       </AtomButton>
     </div>
   </div>
@@ -45,12 +45,13 @@ import getEmployees from "../../composables/useGetEmployees";
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { faSearch, faDownload, faBuilding, faPeopleGroup, faLocationDot, faUser } from "@fortawesome/free-solid-svg-icons";
 import dayjs from "dayjs";
+import MoleculeSiderNavList from "../molecules/MoleculeSiderNavList.vue";
 
 // Add font awesome icons
 library.add(faSearch, faDownload, faBuilding, faPeopleGroup, faLocationDot, faUser);
 
 // Emits
-const emit = defineEmits(["search"]);
+const emit = defineEmits(["search", "export", "switch-content"]);
 
 //Props
 defineProps({
@@ -58,6 +59,10 @@ defineProps({
     type: Array
   }
 });
+
+const switchContentHandler = (contentType) => {
+  emit("switch-content", contentType);
+}
 
 // Set default date range
 const currentDate = dayjs();
@@ -84,6 +89,7 @@ const showFilters = ref(true);
 const showFilterHandler = () => {
   showFilters.value = !showFilters.value;
 }
+// Filter label when filter list is hidden
 const filterList = computed(() => [
   {
     label: searchFilter.value.company ?? "all",
@@ -94,7 +100,7 @@ const filterList = computed(() => [
     icon: "people-group"
   },
   {
-    label: !searchFilter.value.location ? "none" : searchFilter.value.location,
+    label: !searchFilter.value.location ?? "all",
     icon: "location-dot"
   },
   {
@@ -112,11 +118,13 @@ const optionAll = {
   label: "All"
 };
 
+// Values for dropdown options
 const { options: companyOptions } = useGetCompanies();
 const departmentOptions = ref();
 const locationOptions = ref();
 const employeeOptions = ref();
 
+/********************* START ON DROPDOWN CHANGE **********************/
 const onCompanyChange = () => {
   if (!searchFilter.value.company) return;
 
@@ -193,8 +201,14 @@ const onEmployeeChange = () => {
   areButtonsDisabled.value = false;
 }
 
+/********************* END OF ON DROPDOWN CHANGE **********************/
+
 const searchHandler = () => {
   emit("search", searchFilter);
+}
+
+const exportHandler = () => {
+  emit("export", searchFilter);
 }
 </script>
 
@@ -208,6 +222,10 @@ const searchHandler = () => {
 
   &__filter {
     border-top: 1px solid $default-border-color;
+
+    & > h1 {
+      margin-top: unset;
+    }
 
     &-header {
       display: flex;

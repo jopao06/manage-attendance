@@ -1,25 +1,38 @@
 <template>
   <TemplateAdmin class="attendance">
     <template #sider>
-      <OrganismAttendanceSider @search="searchHandler" :tableData="tableData"></OrganismAttendanceSider>
+      <OrganismAttendanceSider @search="searchHandler" @export="exportHandler" @switchContent="switchContentHandler" :tableData="tableData"></OrganismAttendanceSider>
     </template>
     <template #content>
-      <div class="attendance__header">
-        <span>
-          <font-awesome-icon :style="{color: '#17AD49'}" :icon="['fas', 'calendar']" />
-          <label>Date Range</label>
-        </span>
-        <MoleculeRadioGroup class="attendance__header-log-type" v-model:value="logType" button-style="solid" size="small" :radioOptions="logTypeOptions"></MoleculeRadioGroup>
+      <div v-if="activeContent === 'logs'">
+        <div class="attendance__header">
+          <span>
+            <font-awesome-icon :style="{color: '#17AD49'}" :icon="['fas', 'calendar']" />
+            <label>Date Range</label>
+          </span>
+          <MoleculeRadioGroup class="attendance__header-log-type" v-model:value="logType" button-style="solid" size="small" :radioOptions="logTypeOptions"></MoleculeRadioGroup>
+        </div>
+        <AtomAttendanceTable
+          class="attendance__table"
+          :data-source="attendanceTableData"
+          :columns="attendanceTableColumns"
+          size="small"
+          bordered
+        >
+        </AtomAttendanceTable>
       </div>
-      <AtomAttendanceTable
-        class="attendance__table"
-        :data-source="tableData"
-        :columns="tableColumns"
-        :pagination="pagination"
-        size="small"
-        bordered
-      >
-      </AtomAttendanceTable>
+      <div v-else>
+        <h2>Exported Files</h2>
+        <p>{{ exportTableData.length > 0 ? "Download file by clicking download" : "No file to download"}}</p>
+        <AtomExportTable
+          class="export__table"
+          :data-source="exportTableData"
+          :columns="exportTableColumns"
+          size="small"
+          bordered
+        >
+        </AtomExportTable>
+      </div>
     </template>
   </TemplateAdmin>
 </template>
@@ -32,8 +45,10 @@ import type { RadioOption } from "../components/molecules/MoleculeRadioGroup.vue
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { faCalendar } from "@fortawesome/free-solid-svg-icons";
 import AtomAttendanceTable from "../components/atoms/AtomAttendanceTable.vue";
+import AtomExportTable from "../components/atoms/AtomExportTable.vue";
 import getAttendance, { AttendanceTableData } from "../composables/useGetAttendance";
 import OrganismAttendanceSider from "../components/organisms/OrganismAttendanceSider.vue";
+import dayjs from "dayjs";
 
 library.add(faCalendar);
 
@@ -49,7 +64,7 @@ const logTypeOptions: Array<RadioOption> = [
   },
 ];
 
-const tableColumns = [
+const attendanceTableColumns = [
   {
     title: 'Name',
     dataIndex: 'name',
@@ -85,12 +100,44 @@ const tableColumns = [
     key: 'projectName',
     dataIndex: 'projectName',
   },
+  {
+    key: 'action',
+  }
 ];
 
-const { generatedAttendance, attendanceTableData: tableData }= getAttendance();
+const { generatedAttendance, attendanceTableData }= getAttendance();
 
 const searchHandler = (searchFilter: Ref<AttendanceTableData>) => {
   generatedAttendance(searchFilter.value);
+}
+
+const activeContent = ref("logs");
+const switchContentHandler = (contentType) => {
+  activeContent.value = contentType;
+}
+
+const exportTableColumns = [
+  {
+    title: 'Date',
+    dataIndex: 'date',
+    key: 'date',
+  },
+  {
+    title: 'Download',
+    key: 'download',
+  },
+];
+
+const exportTableData = ref([]);
+
+const exportHandler = (searchFilter: Ref<AttendanceTableData>) => {
+  // Get attendance based from filter
+  generatedAttendance(searchFilter.value);
+
+  exportTableData.value.push({
+    date: dayjs().toString(),
+    data: [...attendanceTableData.value]
+  });
 }
 </script>
 

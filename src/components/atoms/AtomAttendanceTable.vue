@@ -37,11 +37,27 @@
             </span>
           </div>
         </template>
+        <template v-else-if="column.key === 'action'">
+          <font-awesome-icon :style="{color: '#17AD49'}" :icon="['fas', 'pen-to-square']" />
+        </template>
       </template>
+      <template #emptyText>
+      <div class="attendance-table__empty">
+        <div class="attendance-table__empty-description">
+          <h1>No attendance logs to show</h1>
+          <p>Get started by searching for the logs</p>
+        </div>
+      </div>
+    </template>
     </a-table>
 </template>
 
 <script setup lang="ts">
+import { library } from '@fortawesome/fontawesome-svg-core';
+import { faPenToSquare } from "@fortawesome/free-solid-svg-icons";
+
+library.add(faPenToSquare);
+
 defineProps({
   columns: {
     type: Array,
@@ -54,7 +70,7 @@ defineProps({
 });
 </script>
 
-<style lang="scss" scoped>
+<style scoped lang="scss">
 .attendance-table {
   .ant-table-tbody {
     font-size: 14px;
@@ -88,6 +104,23 @@ defineProps({
 
   &__out {
     color: #FF7F00;
+  }
+
+  &__empty {
+    height: 30vh;
+
+    &-description {
+      margin-top: 25vh;
+      color: $default-text-color;
+
+      & > h1 {
+        margin-bottom: unset;
+      }
+  
+      & > p {
+        margin-top: unset;
+      }
+    }
   }
 }
 </style>
