@@ -1,13 +1,13 @@
 <template>
   <TemplateAdmin class="attendance">
     <template #sider>
-      <OrganismAttendanceSider></OrganismAttendanceSider>
+      <OrganismAttendanceSider @search="searchHandler"></OrganismAttendanceSider>
     </template>
     <template #content>
       <div class="attendance__header">
         <span>
           <font-awesome-icon :style="{color: '#17AD49'}" :icon="['fas', 'calendar']" />
-            <label>Date Range</label>
+          <label>Date Range</label>
         </span>
         <MoleculeRadioGroup class="attendance__header-log-type" v-model:value="logType" button-style="solid" size="small" :radioOptions="logTypeOptions"></MoleculeRadioGroup>
       </div>
@@ -15,6 +15,7 @@
         class="attendance__table"
         :data-source="tableData"
         :columns="tableColumns"
+        bordered
       >
       </AtomTable>
     </template>
@@ -22,14 +23,14 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref } from "vue";
+import { Ref, ref } from "vue";
 import TemplateAdmin from "../components/templates/TemplateAdmin.vue";
 import MoleculeRadioGroup from "../components/molecules/MoleculeRadioGroup.vue";
 import type { RadioOption } from "../components/molecules/MoleculeRadioGroup.vue";
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { faCalendar } from "@fortawesome/free-solid-svg-icons";
 import AtomTable from "../components/atoms/AtomTable.vue";
-import getAttendance from "../composables/useGetAttendance";
+import getAttendance, { AttendanceTableData } from "../composables/useGetAttendance";
 import OrganismAttendanceSider from "../components/organisms/OrganismAttendanceSider.vue";
 
 library.add(faCalendar);
@@ -47,8 +48,8 @@ const logTypeOptions: Array<RadioOption> = [
 ];
 
 const tableColumns = [
-{
-    name: 'Name',
+  {
+    title: 'Name',
     dataIndex: 'name',
     key: 'name',
   },
@@ -84,7 +85,11 @@ const tableColumns = [
   },
 ];
 
-const { generatedAttendance: tableData }= getAttendance();
+const { generatedAttendance, attendanceTableData: tableData }= getAttendance();
+
+const searchHandler = (searchFilter: Ref<AttendanceTableData>) => {
+  generatedAttendance(searchFilter.value);
+}
 
 </script>
 

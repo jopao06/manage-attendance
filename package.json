@@ -13,6 +13,7 @@
     "@fortawesome/free-solid-svg-icons": "^6.5.2",
     "@fortawesome/vue-fontawesome": "^3.0.8",
     "ant-design-vue": "^4.2.3",
+    "dayjs": "^1.11.11",
     "vue": "^3.4.29",
     "vue-router": "^4.4.0"
   },

@@ -5,6 +5,7 @@
       colorTextBase: '#00291B',
       fontFamily: 'Rubik, sans-serif',
       fontSize: 16,
+      borderRadius: 4,
     }
   }">
     <RouterView />

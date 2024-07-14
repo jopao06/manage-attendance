@@ -10,7 +10,7 @@ export default function getLocations(company: string, department: string | null)
           .filter((attendance) => attendance.company === company && attendance.department_name === department)
           .map((attendance) => {
             return attendance.location;
-        })
+          })
       )
     )
   );

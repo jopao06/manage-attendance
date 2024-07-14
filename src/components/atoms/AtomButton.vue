@@ -1,15 +1,11 @@
 <template>
-  <a-select class="dropdown" v-bind="$attrs" :options="options" :size="size">
-
-  </a-select>
+  <a-button class="button" v-bind="$attrs" :size="size">
+    <slot></slot>
+  </a-button>
 </template>
 
 <script setup lang="ts">
 defineProps({
-  options: {
-    type: Array,
-    required: true,
-  },
   size: {
     type: String,
     default: "large",
@@ -17,8 +13,8 @@ defineProps({
 });
 </script>
 
-<style scoped lang="scss">
-.dropdown {
+<style lang="scss">
+.button {
   width: 100%;
   margin-bottom: $default-spacing;
 }

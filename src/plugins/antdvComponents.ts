@@ -8,6 +8,7 @@ import {
   Tag,
   DatePicker,
   Select,
+  Button,
 } from 'ant-design-vue';
 
 export function useAntdvComponents (app: App<Element>) {
@@ -19,5 +20,6 @@ export function useAntdvComponents (app: App<Element>) {
     .use(Table)
     .use(Tag)
     .use(DatePicker)
-    .use(Select);
+    .use(Select)
+    .use(Button);
 }

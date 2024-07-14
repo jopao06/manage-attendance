@@ -1,5 +1,5 @@
 <template>
-    <a-table v-bind="$attrs" :data-source="dataSource" :columns="columns">
+    <a-table class="table" v-bind="$attrs" :data-source="dataSource" :columns="columns">
       <template #bodyCell="{ column, record }">
         <template v-if="column.key === 'logDetails'">
           <a-tag color="green">
