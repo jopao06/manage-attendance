@@ -6,6 +6,7 @@ import { useAntdvComponents } from './plugins/antdvComponents';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { faUserSecret } from '@fortawesome/free-solid-svg-icons';
+
 import JsonExcel from "vue-json-excel3";
 library.add(faUserSecret)
 

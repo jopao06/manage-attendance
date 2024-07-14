@@ -1,7 +1,7 @@
 <template>
   <TemplateAdmin class="attendance">
     <template #sider>
-      <OrganismAttendanceSider @search="searchHandler" @export="exportHandler" @switchContent="switchContentHandler" :tableData="tableData"></OrganismAttendanceSider>
+      <OrganismAttendanceSider @search="searchHandler" @export="exportHandler" @switchContent="switchContentHandler"></OrganismAttendanceSider>
     </template>
     <template #content>
       <div v-if="activeContent === 'logs'">
@@ -112,7 +112,7 @@ const searchHandler = (searchFilter: Ref<AttendanceTableData>) => {
 }
 
 const activeContent = ref("logs");
-const switchContentHandler = (contentType) => {
+const switchContentHandler = (contentType: string) => {
   activeContent.value = contentType;
 }
 
@@ -128,7 +128,12 @@ const exportTableColumns = [
   },
 ];
 
-const exportTableData = ref([]);
+type ExportData = {
+  date: String;
+  data: AttendanceTableData[];
+}
+
+const exportTableData: Ref<ExportData[]> = ref([]);
 
 const exportHandler = (searchFilter: Ref<AttendanceTableData>) => {
   // Get attendance based from filter

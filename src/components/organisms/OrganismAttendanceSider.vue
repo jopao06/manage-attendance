@@ -53,14 +53,7 @@ library.add(faSearch, faDownload, faBuilding, faPeopleGroup, faLocationDot, faUs
 // Emits
 const emit = defineEmits(["search", "export", "switch-content"]);
 
-//Props
-defineProps({
-  tableData: {
-    type: Array
-  }
-});
-
-const switchContentHandler = (contentType) => {
+const switchContentHandler = (contentType:string) => {
   emit("switch-content", contentType);
 }
 

@@ -56,6 +56,7 @@
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { faPenToSquare } from "@fortawesome/free-solid-svg-icons";
 
+// Add font awesome icons
 library.add(faPenToSquare);
 
 defineProps({

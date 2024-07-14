@@ -36,6 +36,7 @@ export default function getAttendance() {
       .filter((attendance) => attendance.empoyee_name === dataFilter.employee || dataFilter.employee === "all" || !dataFilter.employee)
       .map((attendance) => {
         return {
+          // Map for table data
           employeeId: attendance.employee_id,
           name: attendance.empoyee_name,
           date: attendance.date,

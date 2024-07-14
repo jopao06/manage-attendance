@@ -17,6 +17,13 @@ import logoImg from "../../assets/sprout-solutions-hr-logo.png";
 import { MenuProps } from 'ant-design-vue';
 import { ref } from 'vue';
 
+defineProps({
+  fixed: {
+    type: Boolean,
+    default: false
+  }
+});
+
 const navMenuItems = ref<MenuProps['items']>([
   {
     key: 'requests',
@@ -44,13 +51,6 @@ const navMenuItems = ref<MenuProps['items']>([
     title: 'Maintenance',
   },
 ]);
-
-defineProps({
-  fixed: {
-    type: Boolean,
-    default: false
-  }
-});
 </script>
 
 <style lang="scss" scoped>

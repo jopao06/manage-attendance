@@ -31,7 +31,7 @@ library.add(faCalendar, faDownload);
 const emit = defineEmits(["switch-content"]);
 
 const selectedKeys = ref(["logs"]);
-const siderMenuClickHandler = (contentType) => {
+const siderMenuClickHandler = (contentType: string) => {
   emit("switch-content", contentType);
 }
 </script>
