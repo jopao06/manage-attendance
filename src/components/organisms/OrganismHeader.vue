@@ -44,6 +44,13 @@ const navMenuItems = ref<MenuProps['items']>([
     title: 'Maintenance',
   },
 ]);
+
+defineProps({
+  fixed: {
+    type: Boolean,
+    default: false
+  }
+});
 </script>
 
 <style lang="scss" scoped>

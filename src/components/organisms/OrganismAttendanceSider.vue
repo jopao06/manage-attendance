@@ -5,45 +5,59 @@
       <p>Attendance management is where you can generate, add, edit, and export the logs of the employees.</p>
     </div >
     <div class="attendance-sider__filter">
-      <h1>
-        DATE RANGE
-      </h1>
-      <AtomDatePicker placeholder="Date From" v-model:value="searchFilter.dateFrom"></AtomDatePicker>
-      <AtomDatePicker placeholder="Date To" v-model:value="searchFilter.dateTo"></AtomDatePicker>
+      <h1>DATE RANGE</h1>
+      <AtomDatePicker placeholder="Date From" v-model:value="searchFilter.dateFrom" :allowClear="false"></AtomDatePicker>
+      <AtomDatePicker placeholder="Date To" v-model:value="searchFilter.dateTo" :allowClear="false"></AtomDatePicker>
 
-      <h1>
-        FILTERS
-      </h1>
-      <AtomDropdown placeholder="Company" v-model:value="searchFilter.company" :options="companyOptions" @change="onCompanyChange"></AtomDropdown>
-      <AtomDropdown placeholder="Department" v-model:value="searchFilter.department" :options="departmentOptions" :disabled="isFilterDisabled.department" @change="onDepartmentChange"></AtomDropdown>
-      <AtomDropdown placeholder="Location" v-model:value="searchFilter.location" :options="locationOptions" :disabled="isFilterDisabled.location" @change="onLocationChange"></AtomDropdown>
-      <AtomDropdown placeholder="Employee" v-model:value="searchFilter.employee" :options="employeeOptions" :disabled="isFilterDisabled.employee" @change="onEmployeeChange"></AtomDropdown>
+      <div class="attendance-sider__filter-header">
+        <h1>FILTERS</h1>
+        <h1 class="attendance-sider__filter-header__show-link" @click="showFilterHandler">{{ showFilters ? "Hide All" : "Show All" }}</h1>
+      </div>
+      <div v-if="showFilters">
+        <AtomDropdown placeholder="Company" v-model:value="searchFilter.company" :options="companyOptions" @change="onCompanyChange"></AtomDropdown>
+        <AtomDropdown placeholder="Department" v-model:value="searchFilter.department" :options="departmentOptions" :disabled="isFilterDisabled.department" @change="onDepartmentChange"></AtomDropdown>
+        <AtomDropdown placeholder="Location" v-model:value="searchFilter.location" :options="locationOptions" :disabled="isFilterDisabled.location" @change="onLocationChange"></AtomDropdown>
+        <AtomDropdown placeholder="Employee" v-model:value="searchFilter.employee" :options="employeeOptions" :disabled="isFilterDisabled.employee" @change="onEmployeeChange"></AtomDropdown>
+      </div>
+      <MoleculeList v-else :listData="filterList" :bordered="false" size="small"></MoleculeList>
     </div>
     <div class="attendance-sider__action">
-      <AtomButton type="primary" @click="searchHandler" :disabled="areButtonsDisabled"><font-awesome-icon :icon="['fas', 'search']" />Search</AtomButton>
-      <AtomButton :disabled="areButtonsDisabled"><font-awesome-icon :icon="['fas', 'download']" />Export</AtomButton>
+      <AtomButton class="attendance-sider__action-search" type="primary" @click="searchHandler" :disabled="areButtonsDisabled"><font-awesome-icon :icon="['fas', 'search']" />Search</AtomButton>
+      <AtomButton class="attendance-sider__action-export" @click="searchHandler" :disabled="areButtonsDisabled">
+        <download-excel :data="tableData">
+          <font-awesome-icon :icon="['fas', 'download']" />Export
+        </download-excel>
+      </AtomButton>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue";
+import { ref, computed } from "vue";
 import AtomDatePicker from "../atoms/AtomDatePicker.vue";
 import AtomDropdown from "../atoms/AtomDropdown.vue";
 import AtomButton from "../atoms/AtomButton.vue";
+import MoleculeList from "../molecules/MoleculeList.vue";
 import useGetCompanies from "../../composables/useGetCompanies";
 import getDepartments from "../../composables/useGetDepartments";
 import getLocations from "../../composables/useGetLocations";
 import getEmployees from "../../composables/useGetEmployees";
 import { library } from '@fortawesome/fontawesome-svg-core';
-import { faSearch, faDownload } from "@fortawesome/free-solid-svg-icons";
+import { faSearch, faDownload, faBuilding, faPeopleGroup, faLocationDot, faUser } from "@fortawesome/free-solid-svg-icons";
 import dayjs from "dayjs";
 
 // Add font awesome icons
-library.add(faSearch, faDownload);
+library.add(faSearch, faDownload, faBuilding, faPeopleGroup, faLocationDot, faUser);
 
 // Emits
 const emit = defineEmits(["search"]);
+
+//Props
+defineProps({
+  tableData: {
+    type: Array
+  }
+});
 
 // Set default date range
 const currentDate = dayjs();
@@ -66,9 +80,33 @@ const isFilterDisabled = ref({
   employee: true,
 });
 
+const showFilters = ref(true);
+const showFilterHandler = () => {
+  showFilters.value = !showFilters.value;
+}
+const filterList = computed(() => [
+  {
+    label: searchFilter.value.company ?? "all",
+    icon: "building"
+  },
+  {
+    label: searchFilter.value.department ?? "all",
+    icon: "people-group"
+  },
+  {
+    label: !searchFilter.value.location ? "none" : searchFilter.value.location,
+    icon: "location-dot"
+  },
+  {
+    label: searchFilter.value.employee ?? "all",
+    icon: "user"
+  }
+]);
+
 // Search and export buttons disable logic
 const areButtonsDisabled = ref(true);
 
+// Value for option as "All"
 const optionAll = {
   value: "all",
   label: "All"
@@ -127,7 +165,7 @@ const onDepartmentChange = () => {
     }
 
     isFilterDisabled.value.location = false;
-    locationOptions.value = options.value;
+    locationOptions.value = [optionAll, ...options.value];
   }
 }
 
@@ -135,6 +173,13 @@ const onLocationChange = () => {
   // Reset filters
   searchFilter.value.employee = null;
 
+  if (searchFilter.value.location === "all")  {
+    areButtonsDisabled.value = false;
+    isFilterDisabled.value.employee = true;
+    return;
+  }
+
+  // Check if search filters have value
   if (!searchFilter.value.company || !searchFilter.value.department) return;
 
   const { options } = getEmployees(searchFilter.value.company, searchFilter.value.department);
@@ -161,9 +206,20 @@ const searchHandler = () => {
     padding: 18px;
   }
 
-  &__filter,
-  &__action {
+  &__filter {
     border-top: 1px solid $default-border-color;
+
+    &-header {
+      display: flex;
+      flex-direction: row;
+
+      &__show-link {
+        color: #0F6EEB;
+        cursor: pointer;
+        font-weight: normal;
+        margin-left: auto;
+      }
+    }
   }
 
   &__action {
@@ -171,6 +227,12 @@ const searchHandler = () => {
     width: calc($sider-width - 1px);
     position: fixed;
     bottom: 0;
+    background: $default-bg;
+    border: 1px solid $default-border-color;
+
+    &-export {
+      margin: unset;
+    }
 
     button svg {
       margin-right: 8px;

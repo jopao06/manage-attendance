@@ -32,17 +32,20 @@ export default function getAttendance() {
       })
       .filter((attendance) => attendance.company === dataFilter.company)
       .filter((attendance) => attendance.department_name === dataFilter.department || dataFilter.department === "all" || !dataFilter.location)
-      .filter((attendance) => attendance.location === dataFilter.location || !dataFilter.location)
+      .filter((attendance) => attendance.location === dataFilter.location || dataFilter.location === "all" || !dataFilter.location)
       .filter((attendance) => attendance.empoyee_name === dataFilter.employee || dataFilter.employee === "all" || !dataFilter.employee)
       .map((attendance) => {
         return {
+          employeeId: attendance.employee_id,
           name: attendance.empoyee_name,
           date: attendance.date,
           time: attendance.time,
           in_out: attendance.in_out,
           logDetails: attendance.log_details,
           location: attendance.location,
-          projectName: attendance.project_name
+          locationNotes: attendance.locationNotes,
+          projectName: attendance.project_name,
+          projectSublabel: attendance.projectSublabel,
         }
       }) as AttendanceTableData[];
   };
